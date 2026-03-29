@@ -215,18 +215,18 @@ business_settings — 営業設定（business_hours, holidays, cancel_policy）
 
 ## 11. 画像アセット
 
-`public/images/` に配置。プロンプトは `NACREE_image_prompts.md` を参照。
+`public/images/` に配置済み。
 
 | # | ファイル名 | サイズ | 用途 |
 |---|-----------|-------|------|
 | 1 | hero-bg.jpg | 16:9 | ヒーロー背景 |
 | 2 | concept.jpg | 16:9 | コンセプトセクション |
-| 3 | menu-facial.jpg | 16:9 | フェイシャルメニュー |
-| 4 | menu-body.jpg | 16:9 | アロマボディメニュー |
-| 5 | menu-premium.jpg | 16:9 | プレミアムコース |
-| 6 | booking-bg.jpg | 16:9 | 予約セクション背景 |
-| 7 | cta-bg.jpg | 16:9 | CTAセクション背景 |
-| 8 | staff-bg.jpg | 16:9 | スタッフセクション背景 |
+| 3 | menu-facial.png | 16:9 | フェイシャルメニュー |
+| 4 | menu-body.png | 16:9 | アロマボディメニュー |
+| 5 | menu-premium.png | 16:9 | プレミアムコース |
+| 6 | booking-bg.png | 16:9 | 予約セクション背景 |
+| 7 | cta-bg.png | 16:9 | CTAセクション背景 |
+| 8 | staff-bg.png | 16:9 | スタッフセクション背景 |
 | 9 | staff-1.jpg | 3:4 | 田中 美咲 |
 | 10 | staff-2.jpg | 3:4 | 佐藤 香織 |
 | 11 | staff-3.jpg | 3:4 | 鈴木 優花 |
