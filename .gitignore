@@ -10,3 +10,6 @@ out/
 .wrangler
 *.tsbuildinfo
 next-env.d.ts
+
+# Screenshots (root directory)
+/*.png

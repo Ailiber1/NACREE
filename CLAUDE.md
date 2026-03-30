@@ -7,7 +7,8 @@
 - Evaluator: Generatorとは別のサブエージェント
 
 ## デプロイ先
-Cloudflare Pages（商用アプリ — webapp-tech-stack.mdの選定ルールに従う）
+Vercel（無料枠・個人利用）— API Routes + Server Components使用のため
+デプロイURL: https://nacree.vercel.app
 
 ## セキュリティプロファイル
 **選定: Tier 4 — Commerce（28項目 / 118点満点）**

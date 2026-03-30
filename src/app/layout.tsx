@@ -4,6 +4,9 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "NACRÉE - Salon de Beauté",
   description: "上質なひとときを、あなたに。ヘアサロン NACRÉE の予約サイト",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
