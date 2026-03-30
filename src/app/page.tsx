@@ -20,7 +20,7 @@ const STAFF_DATA = [
     title: "アロマセラピスト",
     specialty: "英国IFA認定資格保持",
     image: "/images/staff-2.jpg",
-    imageStyle: "scale-125",
+    imageStyle: "rotate-[3deg] scale-105",
   },
   {
     name: "鈴木 優花",
