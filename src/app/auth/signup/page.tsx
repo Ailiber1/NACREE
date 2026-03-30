@@ -23,8 +23,18 @@ export default function SignupPage() {
     setError(null);
     setLoading(true);
 
-    if (password.length < 6) {
-      setError("パスワードは6文字以上で入力してください");
+    if (!fullName.trim() || fullName.trim().length > 100) {
+      setError("お名前を1〜100文字で入力してください");
+      setLoading(false);
+      return;
+    }
+    if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/) || email.length > 254) {
+      setError("正しいメールアドレスを入力してください");
+      setLoading(false);
+      return;
+    }
+    if (password.length < 8 || password.length > 72) {
+      setError("パスワードは8〜72文字で入力してください");
       setLoading(false);
       return;
     }
