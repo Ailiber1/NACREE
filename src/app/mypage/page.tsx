@@ -132,6 +132,16 @@ export default function MyPage() {
             >
               トップ
             </Link>
+            <button
+              onClick={async () => {
+                const supabase = createClient();
+                await supabase.auth.signOut();
+                router.push("/");
+              }}
+              className="text-xs text-[var(--color-muted)] hover:text-[var(--color-deep-charcoal)] transition-colors tracking-wider"
+            >
+              ログアウト
+            </button>
           </div>
         </div>
       </header>
