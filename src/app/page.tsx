@@ -331,7 +331,7 @@ export default function Home() {
             fill
             className="object-cover"
           />
-          <div className="absolute inset-0 bg-[var(--color-warm-ivory)]/90" />
+          <div className="absolute inset-0 bg-[var(--color-warm-ivory)]/80 md:bg-[var(--color-warm-ivory)]/90" />
           <div className="relative z-10 max-w-[1200px] mx-auto px-4 sm:px-6">
             <div className="flex flex-col md:flex-row gap-12 md:gap-20">
               <div className="w-full md:w-1/2">
