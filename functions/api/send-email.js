@@ -61,8 +61,9 @@ export async function onRequestPost(context) {
           </table>
         </div>
         <p style="color: #666; font-size: 13px; line-height: 1.8;">
-          ご来店を心よりお待ちしております。<br>
-          キャンセル・変更はマイページからお手続きください。
+          当日は、お客様だけの特別なお時間をご用意してお待ちしております。<br>
+          日々の疲れを忘れ、真珠のような輝きを纏うひとときをお楽しみください。<br><br>
+          <span style="color: #999; font-size: 12px;">キャンセル・変更はマイページからお手続きいただけます。</span>
         </p>
       ${footerHtml}`;
     } else if (type === "payment") {
@@ -101,8 +102,9 @@ export async function onRequestPost(context) {
           </table>
         </div>
         <p style="color: #666; font-size: 13px; line-height: 1.8;">
-          またのご利用を心よりお待ちしております。<br>
-          新しいご予約はサイトからいつでもお取りいただけます。
+          お忙しい中ご連絡いただきありがとうございます。<br>
+          またお気持ちが向かれましたら、いつでもお声がけくださいませ。<br>
+          お客様にお会いできる日を、スタッフ一同楽しみにしております。
         </p>
       ${footerHtml}`;
     }
