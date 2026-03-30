@@ -79,12 +79,16 @@ const FALLBACK_MENUS: Menu[] = [
 
 export default function Home() {
   const [menus, setMenus] = useState<Menu[]>(FALLBACK_MENUS);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState("");
 
   useEffect(() => {
-    async function fetchMenus() {
+    async function init() {
+      if (!isSupabaseConfigured()) return;
+      const supabase = createClient();
+
+      // メニュー取得
       try {
-        if (!isSupabaseConfigured()) return;
-        const supabase = createClient();
         const { data, error } = await supabase
           .from("menus")
           .select("*")
@@ -93,11 +97,18 @@ export default function Home() {
         if (!error && data && data.length > 0) {
           setMenus(data.slice(0, 3));
         }
-      } catch {
-        // フォールバックメニューを使用
-      }
+      } catch {}
+
+      // 認証状態チェック
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          setIsLoggedIn(true);
+          setUserName(user.user_metadata?.full_name || user.email?.split("@")[0] || "");
+        }
+      } catch {}
     }
-    fetchMenus();
+    init();
   }, []);
 
   return (
@@ -125,17 +136,35 @@ export default function Home() {
             <a href="#booking" className="hover:text-[var(--color-deep-charcoal)] transition-colors">
               ご予約
             </a>
-            <Link href="/mypage" className="hover:text-[var(--color-deep-charcoal)] transition-colors">
-              マイページ
-            </Link>
           </nav>
-          <div className="flex items-center gap-3">
-            <Link
-              href="/mypage"
-              className="md:hidden text-xs text-[var(--color-muted)] hover:text-[var(--color-deep-charcoal)] transition-colors tracking-wider"
-            >
-              マイページ
-            </Link>
+          <div className="flex items-center gap-3 sm:gap-4">
+            {isLoggedIn ? (
+              <>
+                <Link
+                  href="/mypage"
+                  className="text-xs tracking-wider text-[var(--color-muted)] hover:text-[var(--color-deep-charcoal)] transition-colors"
+                >
+                  <span className="hidden sm:inline">{userName} 様</span>
+                  <span className="sm:hidden">マイページ</span>
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/auth/login"
+                  className="hidden sm:inline text-xs tracking-wider text-[var(--color-muted)] hover:text-[var(--color-deep-charcoal)] transition-colors"
+                >
+                  ログイン
+                </Link>
+                <Link
+                  href="/auth/signup"
+                  className="text-xs tracking-wider text-[var(--color-muted)] hover:text-[var(--color-deep-charcoal)] transition-colors"
+                >
+                  <span className="hidden sm:inline">新規登録</span>
+                  <span className="sm:hidden">登録/ログイン</span>
+                </Link>
+              </>
+            )}
             <Link
               href="/book"
               className="text-xs sm:text-sm px-4 sm:px-6 py-2 sm:py-2.5 tracking-wider text-[var(--color-warm-ivory)] bg-[var(--color-antique-gold)] hover:opacity-90 transition-opacity"
