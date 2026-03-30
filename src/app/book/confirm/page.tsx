@@ -149,30 +149,46 @@ function BookConfirmContent() {
   ) {
     if (!data) return;
 
-    // 事前決済の場合 — Stripeはサーバーサイドが必要なため、静的エクスポートではモック決済を実行
+    // 事前決済の場合 — Cloudflare Pages Function経由でStripe Checkout
     if (paymentMethod === "prepaid") {
       try {
-        const supabase = createClient();
-        if (bookingId) {
-          await supabase.from("booking_payments").upsert({
-            booking_id: bookingId,
-            amount: data.menu.price,
-            currency: "jpy",
-            status: "completed",
-            stripe_session_id: `mock_${Date.now()}`,
-          }, { onConflict: "booking_id" });
-        }
-        console.log("[Mock Payment] モック決済完了:", { bookingId, amount: data.menu.price });
-      } catch {
-        console.warn("booking_payments更新失敗（モック決済）");
-      }
+        const res = await fetch("/api/checkout", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            bookingId: bookingId || bookingNumber,
+            menuName: data.menu.name,
+            price: data.menu.price,
+            customerEmail,
+          }),
+        });
+        const result = await res.json();
 
-      await sendNotification(bookingId, bookingNumber, customerEmail);
-      sessionStorage.removeItem("booking_menu");
-      sessionStorage.removeItem("booking_staff");
-      sessionStorage.removeItem("booking_datetime");
-      router.push(`/book/complete?bn=${encodeURIComponent(bookingNumber)}&payment=mock`);
-      return;
+        if (result.url) {
+          // Stripe Checkoutページへリダイレクト
+          window.location.href = result.url;
+          return;
+        }
+
+        if (result.mock) {
+          // Stripe未設定時のフォールバック
+          console.log("[Mock Payment] Stripe未設定のためモック決済");
+          await sendNotification(bookingId, bookingNumber, customerEmail);
+          sessionStorage.removeItem("booking_menu");
+          sessionStorage.removeItem("booking_staff");
+          sessionStorage.removeItem("booking_datetime");
+          router.push(`/book/complete?bn=${encodeURIComponent(bookingNumber)}&payment=mock`);
+          return;
+        }
+
+        if (result.error) {
+          setError(result.error);
+          setSubmitting(false);
+          return;
+        }
+      } catch {
+        console.warn("決済API接続エラー。当日払いにフォールバックします。");
+      }
     }
 
     // 当日払い
