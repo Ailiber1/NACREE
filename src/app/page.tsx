@@ -13,14 +13,14 @@ const STAFF_DATA = [
     title: "チーフエステティシャン",
     specialty: "フェイシャルケア歴12年",
     image: "/images/staff-1.jpg",
-    imageStyle: "",
+    imageStyle: "scale-110 object-[center_25%]",
   },
   {
     name: "佐藤 香織",
     title: "アロマセラピスト",
     specialty: "英国IFA認定資格保持",
     image: "/images/staff-2.jpg",
-    imageStyle: "rotate-[6deg] scale-110 object-[center_30%]",
+    imageStyle: "rotate-[10deg] scale-[1.2] object-[center_20%]",
   },
   {
     name: "鈴木 優花",
