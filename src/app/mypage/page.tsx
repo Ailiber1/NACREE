@@ -64,11 +64,38 @@ export default function MyPage() {
     setCancelling(bookingId);
     try {
       const supabase = createClient();
+
+      // キャンセル対象の予約情報を取得
+      const booking = bookings.find(b => b.id === bookingId);
+
       const { error } = await supabase
         .from("bookings")
         .update({ status: "cancelled" })
         .eq("id", bookingId);
       if (error) throw error;
+
+      // キャンセル通知メール送信
+      if (booking) {
+        const { data: { user } } = await supabase.auth.getUser();
+        try {
+          await fetch("/api/send-email", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              type: "cancellation",
+              customerEmail: user?.email || "",
+              customerName: userName,
+              menuName: booking.menus?.name || "施術メニュー",
+              date: booking.date,
+              time: booking.start_time,
+              bookingNumber: booking.notes?.match(/予約番号: ([\w-]+)/)?.[1] || bookingId,
+            }),
+          });
+        } catch {
+          // メール送信失敗は致命的でないので続行
+        }
+      }
+
       await fetchBookings();
     } catch (err) {
       console.error("キャンセルエラー:", err);

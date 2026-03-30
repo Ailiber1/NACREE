@@ -85,6 +85,28 @@ export async function onRequestPost(context) {
       ${footerHtml}`;
     }
 
+    if (type === "cancellation") {
+      subject = "【NACRÉE】ご予約キャンセルのお知らせ";
+      html = `${headerHtml}
+        <h2 style="font-size: 18px; color: #1A1A1A; margin: 0 0 20px;">キャンセルを承りました</h2>
+        <p style="color: #666; font-size: 14px; line-height: 1.8; margin: 0 0 25px;">
+          ${customerName || "お客"}様、以下のご予約のキャンセルを承りました。
+        </p>
+        <div style="background: #fff; border: 1px solid #E8E0D8; border-radius: 8px; padding: 24px; margin: 0 0 25px;">
+          <table style="width: 100%; font-size: 14px; color: #1A1A1A;">
+            <tr><td style="padding: 8px 0; color: #999; width: 100px;">予約番号</td><td style="padding: 8px 0;">${bookingNumber || "-"}</td></tr>
+            <tr><td style="padding: 8px 0; color: #999;">施術</td><td style="padding: 8px 0;">${menuName || "-"}</td></tr>
+            <tr><td style="padding: 8px 0; color: #999;">日時</td><td style="padding: 8px 0;">${date || "-"} ${time || ""}</td></tr>
+            <tr><td style="padding: 8px 0; color: #999;">ステータス</td><td style="padding: 8px 0; color: #c53030;">キャンセル済み</td></tr>
+          </table>
+        </div>
+        <p style="color: #666; font-size: 13px; line-height: 1.8;">
+          またのご利用を心よりお待ちしております。<br>
+          新しいご予約はサイトからいつでもお取りいただけます。
+        </p>
+      ${footerHtml}`;
+    }
+
     if (!subject) {
       return new Response(
         JSON.stringify({ sent: false, reason: "不明な通知タイプ" }),
