@@ -192,7 +192,7 @@ export default function Home() {
               className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-medium text-white leading-relaxed mb-4"
               style={{ fontFamily: "'Noto Serif JP', serif", letterSpacing: "0.08em" }}
             >
-              真珠のような輝きを、あなたの肌に。
+              真珠のような輝きを、<br className="sm:hidden" />あなたの肌に。
             </h1>
             <p className="text-white/70 text-sm md:text-base tracking-wider mb-10">
               完全予約制プライベートサロン
