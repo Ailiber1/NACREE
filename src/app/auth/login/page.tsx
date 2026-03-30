@@ -81,7 +81,7 @@ function LoginContent() {
             color: "var(--color-deep-charcoal)",
           }}
         >
-          NACRÉE
+          <Link href="/" className="hover:opacity-70 transition-opacity">NACRÉE</Link>
         </h1>
         <p
           className="text-center mb-10 text-sm"
