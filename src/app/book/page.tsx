@@ -9,7 +9,7 @@ import type { Menu } from "@/lib/supabase/types";
 
 const FALLBACK_MENUS: Menu[] = [
   {
-    id: "1",
+    id: "9eed4a6c-f659-4067-82a6-27217b00454a",
     name: "フェイシャルトリートメント",
     description: "肌の奥深くに潤いを届け、毛穴ほこりや古い角質を丁寧に除去するフェイシャルケア。",
     price: 18000,
@@ -21,7 +21,7 @@ const FALLBACK_MENUS: Menu[] = [
     updated_at: "",
   },
   {
-    id: "2",
+    id: "08e2d05e-b843-4419-83f3-2c36e1c1ae5f",
     name: "アロマボディケア",
     description: "お客様の体調に合わせた精油をブレンド。心身の疲れをほぐす至上のボディトリートメント。",
     price: 24000,
@@ -33,7 +33,7 @@ const FALLBACK_MENUS: Menu[] = [
     updated_at: "",
   },
   {
-    id: "3",
+    id: "0c604222-de6a-460e-abc4-627f5590541d",
     name: "プレミアムコース",
     description: "フェイシャルからボディまで、厳選された施術を組み合わせたトータルビューティーコース。",
     price: 38000,

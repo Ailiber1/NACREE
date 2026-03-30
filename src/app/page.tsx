@@ -54,7 +54,7 @@ export default async function Home() {
       ? menus.slice(0, 3)
       : [
           {
-            id: "1",
+            id: "9eed4a6c-f659-4067-82a6-27217b00454a",
             name: "フェイシャルトリートメント",
             description:
               "肌の奥深くに潤いを届け、毛穴ほこりや古い角質を丁寧に除去するフェイシャルケア。",
@@ -67,7 +67,7 @@ export default async function Home() {
             updated_at: "",
           },
           {
-            id: "2",
+            id: "08e2d05e-b843-4419-83f3-2c36e1c1ae5f",
             name: "アロマボディケア",
             description:
               "お客様の体調に合わせた精油をブレンド。心身の疲れをほぐす至上のボディトリートメント。",
@@ -80,7 +80,7 @@ export default async function Home() {
             updated_at: "",
           },
           {
-            id: "3",
+            id: "0c604222-de6a-460e-abc4-627f5590541d",
             name: "プレミアムコース",
             description:
               "フェイシャルからボディまで、厳選された施術を組み合わせたトータルビューティーコース。",
@@ -260,13 +260,12 @@ export default async function Home() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-10 md:gap-16">
               {STAFF_DATA.map((staff) => (
                 <div key={staff.name} className="text-center">
-                  <div className="w-28 h-28 md:w-32 md:h-32 rounded-full overflow-hidden mx-auto mb-5 border-2 border-[var(--color-antique-gold)]/40">
+                  <div className="w-28 h-28 md:w-32 md:h-32 rounded-full overflow-hidden mx-auto mb-5 border-2 border-[var(--color-antique-gold)]/40 relative">
                     <Image
                       src={staff.image}
                       alt={staff.name}
-                      width={128}
-                      height={128}
-                      className="object-cover w-full h-full"
+                      fill
+                      className="object-cover"
                     />
                   </div>
                   <p className="text-white font-medium tracking-wide mb-1">{staff.name}</p>

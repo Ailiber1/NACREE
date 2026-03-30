@@ -3,43 +3,22 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { createClient } from "@/lib/supabase/client";
 import { BookingSteps } from "@/components/booking-steps";
 
 interface StaffItem {
   id: string;
   name: string;
-  title: string;
-  specialty: string;
-  image: string;
+  title: string | null;
+  specialties: string[] | null;
+  image_url: string | null;
 }
-
-const DUMMY_STAFF: StaffItem[] = [
-  {
-    id: "staff-1",
-    name: "田中 美咲",
-    title: "チーフエステティシャン",
-    specialty: "フェイシャルケア歴12年",
-    image: "/images/staff-1.jpg",
-  },
-  {
-    id: "staff-2",
-    name: "佐藤 香織",
-    title: "アロマセラピスト",
-    specialty: "英国IFA認定資格保持",
-    image: "/images/staff-2.jpg",
-  },
-  {
-    id: "staff-3",
-    name: "鈴木 優花",
-    title: "エステティシャン",
-    specialty: "敏感肌ケアのスペシャリスト",
-    image: "/images/staff-3.jpg",
-  },
-];
 
 export default function BookStaffPage() {
   const router = useRouter();
   const [menuInfo, setMenuInfo] = useState<{ name: string } | null>(null);
+  const [staffList, setStaffList] = useState<StaffItem[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const stored = sessionStorage.getItem("booking_menu");
@@ -48,6 +27,24 @@ export default function BookStaffPage() {
       return;
     }
     setMenuInfo(JSON.parse(stored));
+
+    async function fetchStaff() {
+      try {
+        const supabase = createClient();
+        const { data, error } = await supabase
+          .from("staff")
+          .select("id, name, title, specialties, image_url")
+          .eq("is_active", true);
+        if (!error && data && data.length > 0) {
+          setStaffList(data);
+        }
+      } catch {
+        // fallback: empty list
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchStaff();
   }, [router]);
 
   function selectStaff(staff: StaffItem) {
@@ -73,34 +70,40 @@ export default function BookStaffPage() {
         {menuInfo.name} — 担当スタッフをお選びください
       </p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
-        {DUMMY_STAFF.map((staff) => (
-          <button
-            key={staff.id}
-            onClick={() => selectStaff(staff)}
-            className="text-center p-6 md:p-8 bg-white border border-[var(--color-border)] hover:border-[var(--color-antique-gold)] transition-colors group"
-            style={{ borderRadius: "8px" }}
-          >
-            <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden mx-auto mb-4 border-2 border-transparent group-hover:border-[var(--color-antique-gold)] transition-colors">
-              <Image
-                src={staff.image}
-                alt={staff.name}
-                width={96}
-                height={96}
-                className="object-cover w-full h-full"
-              />
-            </div>
-            <p
-              className="font-medium tracking-wide mb-1 group-hover:text-[var(--color-antique-gold)] transition-colors"
-              style={{ fontFamily: "'Noto Serif JP', serif" }}
+      {loading ? (
+        <div className="text-center py-20 text-[var(--color-muted)] text-sm">読み込み中...</div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
+          {staffList.map((staff) => (
+            <button
+              key={staff.id}
+              onClick={() => selectStaff(staff)}
+              className="text-center p-6 md:p-8 bg-white border border-[var(--color-border)] hover:border-[var(--color-antique-gold)] transition-colors group"
+              style={{ borderRadius: "8px" }}
             >
-              {staff.name}
-            </p>
-            <p className="text-xs text-[var(--color-muted)] mb-1">{staff.title}</p>
-            <p className="text-xs text-[var(--color-muted)]">{staff.specialty}</p>
-          </button>
-        ))}
-      </div>
+              <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden mx-auto mb-4 border-2 border-transparent group-hover:border-[var(--color-antique-gold)] transition-colors">
+                <Image
+                  src={staff.image_url || "/images/staff-1.jpg"}
+                  alt={staff.name || "スタッフ"}
+                  width={96}
+                  height={96}
+                  className="object-cover w-full h-full"
+                />
+              </div>
+              <p
+                className="font-medium tracking-wide mb-1 group-hover:text-[var(--color-antique-gold)] transition-colors"
+                style={{ fontFamily: "'Noto Serif JP', serif" }}
+              >
+                {staff.name}
+              </p>
+              <p className="text-xs text-[var(--color-muted)] mb-1">{staff.title}</p>
+              <p className="text-xs text-[var(--color-muted)]">
+                {staff.specialties ? staff.specialties.join("・") : ""}
+              </p>
+            </button>
+          ))}
+        </div>
+      )}
 
       <button
         onClick={() => {

@@ -28,13 +28,17 @@ export default function MyPage() {
       return;
     }
 
-    // Get profile name
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("full_name")
-      .eq("id", user.id)
-      .single();
-    setUserName(profile?.full_name || user.email?.split("@")[0] || "ゲスト");
+    // Get profile name (profileが存在しない場合はフォールバック)
+    try {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("full_name")
+        .eq("id", user.id)
+        .single();
+      setUserName(profile?.full_name || user.email?.split("@")[0] || "ゲスト");
+    } catch {
+      setUserName(user.email?.split("@")[0] || "ゲスト");
+    }
 
     // Get bookings with menu info
     const { data, error } = await supabase

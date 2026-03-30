@@ -24,6 +24,7 @@ export interface Menu {
 
 export interface Staff {
   id: string;
+  name: string | null;
   title: string | null;
   bio: string | null;
   specialties: string[] | null;
