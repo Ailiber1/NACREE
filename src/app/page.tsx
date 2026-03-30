@@ -125,6 +125,9 @@ export default function Home() {
             <a href="#booking" className="hover:text-[var(--color-deep-charcoal)] transition-colors">
               ご予約
             </a>
+            <Link href="/mypage" className="hover:text-[var(--color-deep-charcoal)] transition-colors">
+              マイページ
+            </Link>
           </nav>
           <Link
             href="/book"
