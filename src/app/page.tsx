@@ -407,12 +407,14 @@ export default function Home() {
       {/* Footer */}
       <footer className="bg-[var(--color-deep-charcoal)] py-16 md:py-20">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 text-center">
-          <p
-            className="text-white text-xl tracking-[0.2em] mb-6"
+          <a
+            href="#"
+            onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+            className="block text-white text-xl tracking-[0.2em] mb-6 hover:opacity-70 transition-opacity cursor-pointer"
             style={{ fontFamily: "'Noto Serif JP', serif" }}
           >
             NACRÉE
-          </p>
+          </a>
           <p className="text-white/50 text-xs leading-relaxed mb-2">
             〒107-0062 東京都港区南青山3-1-1 NACRÉEビル 3F
           </p>
