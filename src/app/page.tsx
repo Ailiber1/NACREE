@@ -13,7 +13,7 @@ const STAFF_DATA = [
     title: "チーフエステティシャン",
     specialty: "フェイシャルケア歴12年",
     image: "/images/staff-1.jpg",
-    imageStyle: "scale-110 object-[center_25%]",
+    imageStyle: "object-[center_15%]",
   },
   {
     name: "佐藤 香織",
