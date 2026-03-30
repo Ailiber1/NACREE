@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 
 export default function SignupPage() {
+  const router = useRouter();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -57,50 +59,14 @@ export default function SignupPage() {
       return;
     }
 
-    setSuccess(true);
-    setLoading(false);
+    // メール確認不要 — 登録後そのままログイン状態
+    // 予約フローから来た場合は確認画面に戻る
+    if (typeof window !== "undefined" && sessionStorage.getItem("booking_menu")) {
+      router.push("/book/confirm");
+    } else {
+      router.push("/");
+    }
   };
-
-  if (success) {
-    return (
-      <main
-        className="min-h-screen flex items-center justify-center"
-        style={{
-          backgroundColor: "var(--color-warm-ivory)",
-          padding: "24px",
-        }}
-      >
-        <div className="w-full max-w-sm text-center">
-          <h1
-            className="text-3xl font-semibold mb-4 tracking-wide"
-            style={{
-              fontFamily: "'Noto Serif JP', serif",
-              color: "var(--color-deep-charcoal)",
-            }}
-          >
-            登録完了
-          </h1>
-          <p className="text-sm mb-8" style={{ color: "var(--color-muted)" }}>
-            確認メールをお送りしました。メール内のリンクをクリックしてアカウントを有効化してください。
-          </p>
-          <p className="text-xs mb-6" style={{ color: "var(--color-antique-gold)" }}>
-            有効化後、ログインすると予約手続きに戻ります。
-          </p>
-          <Link
-            href={typeof window !== "undefined" && sessionStorage.getItem("booking_menu") ? "/auth/login?redirect=/book/confirm" : "/auth/login"}
-            className="inline-block px-8 py-3 text-sm tracking-wider"
-            style={{
-              backgroundColor: "var(--color-deep-charcoal)",
-              color: "var(--color-warm-ivory)",
-              borderRadius: "4px",
-            }}
-          >
-            ログインページへ
-          </Link>
-        </div>
-      </main>
-    );
-  }
 
   return (
     <main
