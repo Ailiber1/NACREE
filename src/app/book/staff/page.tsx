@@ -14,6 +14,11 @@ interface StaffItem {
   image_url: string | null;
 }
 
+const STAFF_IMAGE_STYLES: Record<string, string> = {
+  "/images/staff-1.jpg": "object-[center_15%]",
+  "/images/staff-2.jpg": "rotate-[10deg] scale-[1.2] object-[center_10%]",
+};
+
 export default function BookStaffPage() {
   const router = useRouter();
   const [menuInfo, setMenuInfo] = useState<{ name: string } | null>(null);
@@ -81,13 +86,12 @@ export default function BookStaffPage() {
               className="text-center p-6 md:p-8 bg-white border border-[var(--color-border)] hover:border-[var(--color-antique-gold)] transition-colors group"
               style={{ borderRadius: "8px" }}
             >
-              <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden mx-auto mb-4 border-2 border-transparent group-hover:border-[var(--color-antique-gold)] transition-colors">
+              <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden mx-auto mb-4 border-2 border-transparent group-hover:border-[var(--color-antique-gold)] transition-colors relative">
                 <Image
                   src={staff.image_url || "/images/staff-1.jpg"}
                   alt={staff.name || "スタッフ"}
-                  width={96}
-                  height={96}
-                  className="object-cover w-full h-full"
+                  fill
+                  className={`object-cover ${STAFF_IMAGE_STYLES[staff.image_url || ""] || ""}`}
                 />
               </div>
               <p
