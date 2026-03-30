@@ -219,19 +219,25 @@ function BookConfirmContent() {
     customerEmail: string
   ) {
     if (!data) return;
-    // 静的エクスポートではメール送信APIが使えないため、コンソールログで代替
-    console.log("[Notification] 予約確定通知:", {
-      type: "confirmation",
-      bookingId,
-      customerEmail,
-      customerName: "お客様",
-      menuName: data.menu.name,
-      staffName: data.staff.name,
-      date: data.datetime.date,
-      time: data.datetime.time,
-      price: data.menu.price,
-      bookingNumber,
-    });
+    try {
+      await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "confirmation",
+          customerEmail,
+          customerName: "お客様",
+          menuName: data.menu.name,
+          staffName: data.staff.name,
+          date: data.datetime.date,
+          time: data.datetime.time,
+          amount: data.menu.price,
+          bookingNumber,
+        }),
+      });
+    } catch {
+      console.log("[Email] 通知送信に失敗しましたが、予約は完了しています");
+    }
   }
 
   if (!data) return null;
