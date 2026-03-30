@@ -16,6 +16,7 @@ export default function MyPage() {
   const [loading, setLoading] = useState(true);
   const [userName, setUserName] = useState<string>("");
   const [cancelling, setCancelling] = useState<string | null>(null);
+  const [notLoggedIn, setNotLoggedIn] = useState(false);
 
   const fetchBookings = useCallback(async () => {
     const supabase = createClient();
@@ -24,7 +25,8 @@ export default function MyPage() {
     } = await supabase.auth.getUser();
 
     if (!user) {
-      router.replace("/auth/login");
+      setNotLoggedIn(true);
+      setLoading(false);
       return;
     }
 
@@ -141,12 +143,40 @@ export default function MyPage() {
         >
           マイページ
         </h1>
-        <p className="text-sm text-[var(--color-muted)] mb-10">
-          {userName} 様
-        </p>
+        {userName && (
+          <p className="text-sm text-[var(--color-muted)] mb-10">
+            {userName} 様
+          </p>
+        )}
 
         {loading ? (
           <div className="text-center py-20 text-[var(--color-muted)] text-sm">読み込み中...</div>
+        ) : notLoggedIn ? (
+          <div
+            className="bg-white border border-[var(--color-border)] p-10 md:p-16 text-center"
+            style={{ borderRadius: "8px" }}
+          >
+            <p className="text-sm text-[var(--color-muted)] mb-6 leading-relaxed">
+              マイページをご利用いただくには、<br />
+              事前にアカウント登録が必要です。
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Link
+                href="/auth/signup"
+                className="inline-block px-8 py-3 text-sm tracking-[0.15em] text-[var(--color-warm-ivory)] bg-[var(--color-antique-gold)] hover:opacity-90 transition-opacity"
+                style={{ borderRadius: "4px" }}
+              >
+                アカウント登録
+              </Link>
+              <Link
+                href="/auth/login"
+                className="inline-block px-8 py-3 text-sm tracking-wider text-[var(--color-muted)] border border-[var(--color-border)] hover:border-[var(--color-deep-charcoal)] hover:text-[var(--color-deep-charcoal)] transition-colors"
+                style={{ borderRadius: "4px" }}
+              >
+                ログイン
+              </Link>
+            </div>
+          </div>
         ) : (
           <>
             {/* Upcoming */}

@@ -129,13 +129,21 @@ export default function Home() {
               マイページ
             </Link>
           </nav>
-          <Link
-            href="/book"
-            className="text-xs sm:text-sm px-4 sm:px-6 py-2 sm:py-2.5 tracking-wider text-[var(--color-warm-ivory)] bg-[var(--color-antique-gold)] hover:opacity-90 transition-opacity"
-            style={{ borderRadius: "4px" }}
-          >
-            ご予約はこちら
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/mypage"
+              className="md:hidden text-xs text-[var(--color-muted)] hover:text-[var(--color-deep-charcoal)] transition-colors tracking-wider"
+            >
+              マイページ
+            </Link>
+            <Link
+              href="/book"
+              className="text-xs sm:text-sm px-4 sm:px-6 py-2 sm:py-2.5 tracking-wider text-[var(--color-warm-ivory)] bg-[var(--color-antique-gold)] hover:opacity-90 transition-opacity"
+              style={{ borderRadius: "4px" }}
+            >
+              ご予約はこちら
+            </Link>
+          </div>
         </div>
       </header>
 
