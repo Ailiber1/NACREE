@@ -101,12 +101,11 @@ export default function BookConfirmPage() {
         }
       }
 
-      // 完了ページへ
-      sessionStorage.setItem("booking_number", bookingNumber);
+      // 完了ページへ（URLパラメータで予約番号を渡す）
       sessionStorage.removeItem("booking_menu");
       sessionStorage.removeItem("booking_staff");
       sessionStorage.removeItem("booking_datetime");
-      router.push("/book/complete");
+      router.push(`/book/complete?bn=${encodeURIComponent(bookingNumber)}`);
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "予約に失敗しました";
       setError(message);

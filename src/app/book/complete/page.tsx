@@ -1,25 +1,25 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { Suspense } from "react";
 
-export default function BookCompletePage() {
+function BookCompleteContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [bookingNumber, setBookingNumber] = useState<string | null>(null);
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    const num = sessionStorage.getItem("booking_number");
-    if (!num) {
+    const bn = searchParams.get("bn");
+    if (!bn) {
       router.replace("/book");
       return;
     }
-    setBookingNumber(num);
-    sessionStorage.removeItem("booking_number");
-    // Fade in animation
+    setBookingNumber(bn);
     requestAnimationFrame(() => setShow(true));
-  }, [router]);
+  }, [searchParams, router]);
 
   if (!bookingNumber) return null;
 
@@ -85,5 +85,13 @@ export default function BookCompletePage() {
         </Link>
       </div>
     </div>
+  );
+}
+
+export default function BookCompletePage() {
+  return (
+    <Suspense fallback={null}>
+      <BookCompleteContent />
+    </Suspense>
   );
 }
