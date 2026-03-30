@@ -13,18 +13,21 @@ const STAFF_DATA = [
     title: "チーフエステティシャン",
     specialty: "フェイシャルケア歴12年",
     image: "/images/staff-1.jpg",
+    imageStyle: "",
   },
   {
     name: "佐藤 香織",
     title: "アロマセラピスト",
     specialty: "英国IFA認定資格保持",
     image: "/images/staff-2.jpg",
+    imageStyle: "scale-125",
   },
   {
     name: "鈴木 優花",
     title: "エステティシャン",
     specialty: "敏感肌ケアのスペシャリスト",
     image: "/images/staff-3.jpg",
+    imageStyle: "",
   },
 ];
 
@@ -311,7 +314,7 @@ export default function Home() {
                       src={staff.image}
                       alt={staff.name}
                       fill
-                      className="object-cover"
+                      className={`object-cover ${staff.imageStyle}`}
                     />
                   </div>
                   <p className="text-white font-medium tracking-wide mb-1">{staff.name}</p>
