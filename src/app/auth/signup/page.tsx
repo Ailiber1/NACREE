@@ -54,7 +54,14 @@ export default function SignupPage() {
     });
 
     if (error) {
-      setError(error.message);
+      const errorMessages: Record<string, string> = {
+        "User already registered": "このメールアドレスは既に登録されています。ログインページからお試しください。",
+        "Password should be at least 6 characters": "パスワードは6文字以上で入力してください。",
+        "Unable to validate email address: invalid format": "正しいメールアドレスを入力してください。",
+        "Signups not allowed for this instance": "現在、新規登録を受け付けておりません。",
+        "Email rate limit exceeded": "しばらく時間をおいてから再度お試しください。",
+      };
+      setError(errorMessages[error.message] || error.message);
       setLoading(false);
       return;
     }

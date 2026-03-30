@@ -50,7 +50,13 @@ function LoginContent() {
     });
 
     if (error) {
-      setError(error.message);
+      const errorMessages: Record<string, string> = {
+        "Invalid login credentials": "メールアドレスまたはパスワードが正しくありません。",
+        "Email not confirmed": "メールアドレスが確認されていません。確認メールをご確認ください。",
+        "Invalid email or password": "メールアドレスまたはパスワードが正しくありません。",
+        "Email rate limit exceeded": "しばらく時間をおいてから再度お試しください。",
+      };
+      setError(errorMessages[error.message] || error.message);
       setLoading(false);
       return;
     }
