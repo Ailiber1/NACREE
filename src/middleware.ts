@@ -1,12 +1,5 @@
-import { type NextRequest } from "next/server";
-import { updateSession } from "@/lib/supabase/middleware";
-
-export async function middleware(request: NextRequest) {
-  return await updateSession(request);
-}
-
-export const config = {
-  matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|images/|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
-  ],
-};
+// Middleware is not supported in static export (output: 'export')
+// Authentication checks have been moved to client-side:
+// - Admin layout: src/app/admin/layout.tsx (useEffect auth check)
+// - Mypage: src/app/mypage/page.tsx (useEffect auth check)
+export {};

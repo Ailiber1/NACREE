@@ -7,8 +7,8 @@
 - Evaluator: Generatorとは別のサブエージェント
 
 ## デプロイ先
-Vercel（無料枠・個人利用）— API Routes + Server Components使用のため
-デプロイURL: https://nacree.vercel.app
+Cloudflare Pages（無料枠）— 静的エクスポート（output: 'export'）を使用
+デプロイコマンド: `npx wrangler pages deploy out --project-name nacree`
 
 ## セキュリティプロファイル
 **選定: Tier 4 — Commerce（28項目 / 118点満点）**

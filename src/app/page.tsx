@@ -1,6 +1,10 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/client";
+import { isSupabaseConfigured } from "@/lib/supabase/client";
 import type { Menu } from "@/lib/supabase/types";
 
 const STAFF_DATA = [
@@ -31,68 +35,70 @@ const BOOKING_STEPS = [
   { num: "04", label: "予約確定" },
 ];
 
-async function getMenus(): Promise<Menu[]> {
-  try {
-    const supabase = await createClient();
-    const { data, error } = await supabase
-      .from("menus")
-      .select("*")
-      .eq("is_active", true)
-      .order("sort_order");
-    if (error || !data) return [];
-    return data;
-  } catch {
-    return [];
-  }
-}
+const FALLBACK_MENUS: Menu[] = [
+  {
+    id: "9eed4a6c-f659-4067-82a6-27217b00454a",
+    name: "フェイシャルトリートメント",
+    description:
+      "肌の奥深くに潤いを届け、毛穴ほこりや古い角質を丁寧に除去するフェイシャルケア。",
+    price: 18000,
+    duration_min: 60,
+    image_url: "/images/menu-facial.jpg",
+    is_active: true,
+    sort_order: 1,
+    created_at: "",
+    updated_at: "",
+  },
+  {
+    id: "08e2d05e-b843-4419-83f3-2c36e1c1ae5f",
+    name: "アロマボディケア",
+    description:
+      "お客様の体調に合わせた精油をブレンド。心身の疲れをほぐす至上のボディトリートメント。",
+    price: 24000,
+    duration_min: 90,
+    image_url: "/images/menu-body.jpg",
+    is_active: true,
+    sort_order: 2,
+    created_at: "",
+    updated_at: "",
+  },
+  {
+    id: "0c604222-de6a-460e-abc4-627f5590541d",
+    name: "プレミアムコース",
+    description:
+      "フェイシャルからボディまで、厳選された施術を組み合わせたトータルビューティーコース。",
+    price: 38000,
+    duration_min: 120,
+    image_url: "/images/menu-premium.jpg",
+    is_active: true,
+    sort_order: 3,
+    created_at: "",
+    updated_at: "",
+  },
+];
 
-export default async function Home() {
-  const menus = await getMenus();
+export default function Home() {
+  const [menus, setMenus] = useState<Menu[]>(FALLBACK_MENUS);
 
-  const displayMenus =
-    menus.length > 0
-      ? menus.slice(0, 3)
-      : [
-          {
-            id: "9eed4a6c-f659-4067-82a6-27217b00454a",
-            name: "フェイシャルトリートメント",
-            description:
-              "肌の奥深くに潤いを届け、毛穴ほこりや古い角質を丁寧に除去するフェイシャルケア。",
-            price: 18000,
-            duration_min: 60,
-            image_url: "/images/menu-facial.jpg",
-            is_active: true,
-            sort_order: 1,
-            created_at: "",
-            updated_at: "",
-          },
-          {
-            id: "08e2d05e-b843-4419-83f3-2c36e1c1ae5f",
-            name: "アロマボディケア",
-            description:
-              "お客様の体調に合わせた精油をブレンド。心身の疲れをほぐす至上のボディトリートメント。",
-            price: 24000,
-            duration_min: 90,
-            image_url: "/images/menu-body.jpg",
-            is_active: true,
-            sort_order: 2,
-            created_at: "",
-            updated_at: "",
-          },
-          {
-            id: "0c604222-de6a-460e-abc4-627f5590541d",
-            name: "プレミアムコース",
-            description:
-              "フェイシャルからボディまで、厳選された施術を組み合わせたトータルビューティーコース。",
-            price: 38000,
-            duration_min: 120,
-            image_url: "/images/menu-premium.jpg",
-            is_active: true,
-            sort_order: 3,
-            created_at: "",
-            updated_at: "",
-          },
-        ];
+  useEffect(() => {
+    async function fetchMenus() {
+      try {
+        if (!isSupabaseConfigured()) return;
+        const supabase = createClient();
+        const { data, error } = await supabase
+          .from("menus")
+          .select("*")
+          .eq("is_active", true)
+          .order("sort_order");
+        if (!error && data && data.length > 0) {
+          setMenus(data.slice(0, 3));
+        }
+      } catch {
+        // フォールバックメニューを使用
+      }
+    }
+    fetchMenus();
+  }, []);
 
   return (
     <>
@@ -207,8 +213,8 @@ export default async function Home() {
               施術メニュー
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-              {displayMenus.map((menu, i) => (
-                <div key={menu.id} className={`${i === 2 ? "md:mt-8" : ""}`}>
+              {menus.map((menu) => (
+                <div key={menu.id} className="flex flex-col">
                   <div className="relative aspect-[4/3] overflow-hidden mb-5" style={{ borderRadius: "4px" }}>
                     <Image
                       src={menu.image_url || "/images/menu-facial.jpg"}
@@ -226,7 +232,7 @@ export default async function Home() {
                   <p className="text-sm text-[var(--color-muted)] mb-3" style={{ fontFamily: "'Inter', sans-serif" }}>
                     {menu.duration_min}min ¥{menu.price.toLocaleString()}
                   </p>
-                  <p className="text-sm leading-relaxed text-[var(--color-muted)] mb-4">
+                  <p className="text-sm leading-relaxed text-[var(--color-muted)] mb-4 flex-1">
                     {menu.description}
                   </p>
                   <Link

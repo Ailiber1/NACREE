@@ -6,6 +6,7 @@ node_modules/
 .firebase/
 .next/
 out/
+.open-next/
 .vercel
 .wrangler
 *.tsbuildinfo

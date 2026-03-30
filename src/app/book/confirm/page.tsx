@@ -149,49 +149,33 @@ function BookConfirmContent() {
   ) {
     if (!data) return;
 
-    // 事前決済の場合
+    // 事前決済の場合 — Stripeはサーバーサイドが必要なため、静的エクスポートではモック決済を実行
     if (paymentMethod === "prepaid") {
       try {
-        const res = await fetch("/api/checkout", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            bookingId: bookingId || bookingNumber,
-            menuName: data.menu.name,
-            price: data.menu.price,
-            customerEmail,
-          }),
-        });
-        const result = await res.json();
-
-        if (result.mock) {
-          // Stripe未設定: モック決済完了
-          await sendNotification(bookingId, bookingNumber, customerEmail);
-          sessionStorage.removeItem("booking_menu");
-          sessionStorage.removeItem("booking_staff");
-          sessionStorage.removeItem("booking_datetime");
-          router.push(`/book/complete?bn=${encodeURIComponent(bookingNumber)}&payment=mock`);
-          return;
+        const supabase = createClient();
+        if (bookingId) {
+          await supabase.from("booking_payments").upsert({
+            booking_id: bookingId,
+            amount: data.menu.price,
+            currency: "jpy",
+            status: "completed",
+            stripe_session_id: `mock_${Date.now()}`,
+          }, { onConflict: "booking_id" });
         }
-
-        if (result.url) {
-          // Stripe Checkoutへリダイレクト
-          window.location.href = result.url;
-          return;
-        }
-
-        if (result.error) {
-          setError(result.error);
-          setSubmitting(false);
-          return;
-        }
+        console.log("[Mock Payment] モック決済完了:", { bookingId, amount: data.menu.price });
       } catch {
-        // 決済APIエラー: 当日払いにフォールバック
-        console.warn("決済API接続エラー。当日払いにフォールバックします。");
+        console.warn("booking_payments更新失敗（モック決済）");
       }
+
+      await sendNotification(bookingId, bookingNumber, customerEmail);
+      sessionStorage.removeItem("booking_menu");
+      sessionStorage.removeItem("booking_staff");
+      sessionStorage.removeItem("booking_datetime");
+      router.push(`/book/complete?bn=${encodeURIComponent(bookingNumber)}&payment=mock`);
+      return;
     }
 
-    // 当日払い or フォールバック
+    // 当日払い
     // booking_paymentsに当日払いとして記録
     try {
       const supabase = createClient();
@@ -220,27 +204,19 @@ function BookConfirmContent() {
     customerEmail: string
   ) {
     if (!data) return;
-    try {
-      await fetch("/api/notifications/send", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          type: "confirmation",
-          bookingId,
-          customerEmail,
-          customerName: "お客様",
-          menuName: data.menu.name,
-          staffName: data.staff.name,
-          date: data.datetime.date,
-          time: data.datetime.time,
-          price: data.menu.price,
-          bookingNumber,
-        }),
-      });
-    } catch {
-      // 通知エラーは致命的でないので無視
-      console.warn("メール通知の送信に失敗しました");
-    }
+    // 静的エクスポートではメール送信APIが使えないため、コンソールログで代替
+    console.log("[Notification] 予約確定通知:", {
+      type: "confirmation",
+      bookingId,
+      customerEmail,
+      customerName: "お客様",
+      menuName: data.menu.name,
+      staffName: data.staff.name,
+      date: data.datetime.date,
+      time: data.datetime.time,
+      price: data.menu.price,
+      bookingNumber,
+    });
   }
 
   if (!data) return null;
