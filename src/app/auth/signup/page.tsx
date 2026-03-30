@@ -83,8 +83,11 @@ export default function SignupPage() {
           <p className="text-sm mb-8" style={{ color: "var(--color-muted)" }}>
             確認メールをお送りしました。メール内のリンクをクリックしてアカウントを有効化してください。
           </p>
+          <p className="text-xs mb-6" style={{ color: "var(--color-antique-gold)" }}>
+            有効化後、ログインすると予約手続きに戻ります。
+          </p>
           <Link
-            href="/auth/login"
+            href={typeof window !== "undefined" && sessionStorage.getItem("booking_menu") ? "/auth/login?redirect=/book/confirm" : "/auth/login"}
             className="inline-block px-8 py-3 text-sm tracking-wider"
             style={{
               backgroundColor: "var(--color-deep-charcoal)",

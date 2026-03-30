@@ -61,8 +61,7 @@ function BookConfirmContent() {
       } = await supabase.auth.getUser();
 
       if (!user) {
-        sessionStorage.setItem("booking_redirect", "/book/confirm");
-        router.push("/auth/login");
+        router.push("/auth/login?redirect=/book/confirm");
         return;
       }
 
