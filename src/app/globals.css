@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+:root {
+  --color-warm-ivory: #FAF6F1;
+  --color-deep-charcoal: #1A1A1A;
+  --color-antique-gold: #B8956A;
+  --color-sage-green: #8FA98F;
+  --color-border: rgba(26, 26, 26, 0.1);
+  --color-muted: rgba(26, 26, 26, 0.6);
+}
+
+body {
+  font-family: "Noto Sans JP", "Inter", sans-serif;
+  color: var(--color-deep-charcoal);
+  background-color: var(--color-warm-ivory);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Noto Serif JP", serif;
+}
